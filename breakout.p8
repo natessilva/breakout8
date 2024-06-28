@@ -1,9 +1,36 @@
 pico-8 cartridge // http://www.pico-8.com
 version 41
 __lua__
+function _init()
+	ball={
+		x=30,
+		y=70,
+		dx=1,
+		dy=1,
+		r=2
+	}
+end
+
+function _update60()
+	ball.x+=ball.dx
+	ball.y+=ball.dy
+	if ball.x+ball.r>=127 then
+	 ball.dx*=-1
+	end
+	if ball.x-ball.r<=0 then
+	 ball.dx*=-1
+	end
+	if ball.y+ball.r>=127 then
+	 ball.dy*=-1
+	end
+	if ball.y-ball.r<=0 then
+	 ball.dy*=-1
+	end
+end
+
 function _draw()
-	cls()
-	rectfill(10,15,15,60)	
+	cls(2)
+	circfill(flr(ball.x+0.5),flr(ball.y+0.5),ball.r)
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
