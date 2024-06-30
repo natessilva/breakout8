@@ -60,7 +60,7 @@ function update_ball()
 		120,
 		paddle.w,
 		4
-	) then
+	) and ball.dy > 0 then
 		ball.dy *= -1
 		turn = true
 	end
@@ -91,7 +91,7 @@ function update_paddle()
 end
 
 function draw_paddle()
-	rectfill(paddle.x, 120, paddle.x + paddle.w, 123)
+	rectfill(paddle.x, 120, paddle.x + paddle.w, 123, 6)
 end
 -->8
 --utilities
