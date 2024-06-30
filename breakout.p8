@@ -5,13 +5,23 @@ function _init()
 	ball={
 		x=30.5,
 		y=70.5,
-		dx=.7,
 		dy=.7,
+		dx=.7,
 		r=2
 	}
 end
 
 function _update60()
+	update_ball()
+end
+
+function _draw()
+	cls(2)
+	draw_ball()
+end
+-->8
+-- ball
+function update_ball()
 	ball.x+=ball.dx
 	ball.y+=ball.dy
 	turn=false
@@ -37,10 +47,10 @@ function _update60()
 	end
 end
 
-function _draw()
-	cls(2)
+function draw_ball()
 	circfill(ball.x,ball.y,ball.r)
 end
+
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
