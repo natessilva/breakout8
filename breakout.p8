@@ -3,23 +3,11 @@ version 41
 __lua__
 
 function _init()
-	spd = 1.2
-	ball = {
-		x = 57.5,
-		y = 117.5,
-		dy = -.7 * spd,
-		dx = .7 * spd,
-		r = 2
-	}
-	paddle = {
-		x = 50,
-		w = 15
-	}
+	init_game()
 end
 
 function _update60()
-	update_paddle()
-	update_ball()
+	update_state()
 end
 
 function _draw()
@@ -46,8 +34,7 @@ function update_ball()
 	-- bottom
 	-- this should lose a life!!
 	if ball.y + ball.r >= 127 and ball.dy > 0 then
-		--	 ball.dy*=-1
-		--	 turn=true
+  state='end'
 	end
 
 	--collide with paddle
@@ -76,7 +63,7 @@ function update_ball()
 end
 
 function draw_ball()
-	circfill(ball.x, ball.y, ball.r)
+	circfill(ball.x, ball.y, ball.r,7)
 end
 
 -->8
@@ -103,6 +90,54 @@ function rect_collide(x1,y1,w1,h1,x2,y2,w2,h2)
 			and y2 < y1 + h1
 end
 
+-->8
+--game states
+
+function init_game()
+	spd = 1.2
+	ball = {
+		x = 57.5,
+		y = 117.5,
+		dy = -.7 * spd,
+		dx = .7 * spd,
+		r = 2
+	}
+	paddle = {
+		x = 50,
+		w = 15
+	}
+	state='start'
+end
+
+function update_state()
+	if state == 'start' then
+		update_start()
+	elseif state== 'game' then
+		update_game()
+	elseif state=='end' then
+	 	update_end()
+	end
+end
+
+function update_start()
+	update_paddle()
+	ball.x = flr(paddle.x+paddle.w/2)+.5
+	if btnp(❎) or btnp(🅾️) then
+	 state='game'
+	end
+end
+
+function update_game()
+	update_paddle()
+	update_ball()
+end
+
+function update_end()
+	if btnp(❎) or btnp(🅾️) then
+	 init_game()
+	 state='start'
+	end
+end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
