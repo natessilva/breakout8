@@ -11,9 +11,8 @@ function _update60()
 end
 
 function _draw()
-	cls(2)
-	draw_paddle()
-	draw_ball()
+	cls(1)
+	draw_state()
 end
 -->8
 -- ball
@@ -83,15 +82,19 @@ end
 -->8
 --utilities
 function rect_collide(x1,y1,w1,h1,x2,y2,w2,h2)
-	print(y2)
 	return x1 < x2 + w2
 			and x2 < x1 + w1
 			and y1 < y2 + h2
 			and y2 < y1 + h1
 end
 
+
+function center_text(text,y,c)
+	width=#text*2
+	print(text,64-width,y,c)
+end
 -->8
---game states
+--game states/modes
 
 function init_game()
 	spd = 1.2
@@ -137,6 +140,34 @@ function update_end()
 	 init_game()
 	 state='start'
 	end
+end
+
+function draw_state()
+	if state=='start' then
+		draw_start()
+	elseif state=='game' then
+		draw_game()
+	elseif state=='end' then
+		draw_end()
+	end
+end
+
+function draw_start()
+	cls(1)
+	center_text("press button to start", 45,7)
+	draw_paddle()
+	draw_ball()
+end
+
+function draw_game()
+	draw_paddle()
+	draw_ball()
+end
+
+function draw_end()
+	cls(2)
+	center_text("press button to re-play",45,7)
+	center_text("u died",75,8)
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
