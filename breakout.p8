@@ -3,10 +3,10 @@ version 41
 __lua__
 function _init()
 	ball={
-		x=30,
-		y=70,
-		dx=1,
-		dy=1,
+		x=30.5,
+		y=70.5,
+		dx=.7,
+		dy=.7,
 		r=2
 	}
 end
@@ -14,23 +14,32 @@ end
 function _update60()
 	ball.x+=ball.dx
 	ball.y+=ball.dy
-	if ball.x+ball.r>=127 then
+	turn=false
+	if ball.x+ball.r>=127 and ball.dx>0 then
 	 ball.dx*=-1
+	 turn=true
 	end
-	if ball.x-ball.r<=0 then
+	if ball.x-ball.r<=0 and ball.dx<0 then
 	 ball.dx*=-1
+	 turn=true
 	end
-	if ball.y+ball.r>=127 then
+	if ball.y+ball.r>=127 and ball.dy>0 then
 	 ball.dy*=-1
+	 turn=true
 	end
-	if ball.y-ball.r<=0 then
+	if ball.y-ball.r<=0 and ball.dy < 0 then
 	 ball.dy*=-1
+	 turn=true
+	end
+	if turn then
+		ball.x=flr(ball.x)+.5
+		ball.y=flr(ball.y)+.5
 	end
 end
 
 function _draw()
 	cls(2)
-	circfill(flr(ball.x+0.5),flr(ball.y+0.5),ball.r)
+	circfill(ball.x,ball.y,ball.r)
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
