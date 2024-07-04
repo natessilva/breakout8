@@ -37,17 +37,13 @@ function update_ball()
 	end
 
 	--collide with paddle
-	if rect_collide(
-		ball.x-ball.r,
-		ball.y-ball.r,
-		ball.r*2,
-		ball.r*2,
-		paddle.x,
-		120,
-		paddle.w,
-		4
-	) and ball.dy > 0 then
-		ball.dy *= -1
+	local xo,yo = collide(ball,paddle)
+	if xo and yo and ball.dy > 0 then
+		if xo < yo then
+			ball.dx *= -1
+		else
+			ball.dy *= -1
+		end
 		turn = true
 	end
 	--top
@@ -70,22 +66,40 @@ end
 function update_paddle()
 	if btn(⬅️) then
 		paddle.x -= 1.75
+		ball.dx=abs(ball.dx)*-1
 	elseif btn(➡️) then
 		paddle.x += 1.75
+		ball.dx=abs(ball.dx)
 	end
 	paddle.x = mid(0, paddle.x, 127 - paddle.w)
 end
 
 function draw_paddle()
-	rectfill(paddle.x, 120, paddle.x + paddle.w, 123, 6)
+	rectfill(paddle.x, paddle.y, paddle.x + paddle.w, paddle.y+paddle.h, 6)
 end
 -->8
 --utilities
-function rect_collide(x1,y1,w1,h1,x2,y2,w2,h2)
-	return x1 < x2 + w2
-			and x2 < x1 + w1
-			and y1 < y2 + h2
-			and y2 < y1 + h1
+function collide(ball, r)
+	local ball_left=ball.x-ball.r
+	local ball_right=ball.x+ball.r
+	local ball_top=ball.y-ball.r
+	local ball_bottom=ball.y+ball.r
+	
+	local r_left=r.x
+	local r_right=r.x+r.w
+	local r_top=r.y
+	local r_bottom=r.y+r.h
+	
+	if ball_left < r_right
+		and r_left < ball_right
+		and ball_top < r_bottom
+		and r_top < ball_bottom then
+		
+		local x_overlap=min(r_right-ball_left,ball_right-r_left)
+		local y_overlap=min(r_bottom-ball_top,ball_bottom-r_top)
+		return x_overlap,y_overlap		
+	end
+	return nil,nil
 end
 
 
@@ -107,6 +121,8 @@ function init_game()
 	}
 	paddle = {
 		x = 50,
+		y = 120,
+		h = 3,
 		w = 15
 	}
 	state='start'
