@@ -82,7 +82,7 @@ function update_ball(ball)
 		elseif paddle.dx < 0 then
 			ball.dx = -1
 		end
-		if btnp(❎) or btnp(🅾️) then
+		if btnp() > 8 then
 			ball.sticky = false
 		end
 		return
@@ -90,11 +90,12 @@ function update_ball(ball)
 
 	update(ball)
 	-- wall boundaries
-	if ball.x <= 1 or ball.x >= 81 - ball.w then
+	if ball.x <= 1 and ball.dx < 0
+			or ball.x >= 81 - ball.w and ball.dx > 0 then
 		ball.dx *= -1
 		sfx(0)
 	end
-	if ball.y <= 0 then
+	if ball.y <= 1 and ball.dy < 0 then
 		ball.dy *= -1
 		sfx(0)
 	end
@@ -194,21 +195,20 @@ end
 function hit_brick(b)
 	del(bricks, b)
 	sfx(0)
-
-	if #bricks == 0 then
-		level += 1
-		init_bricks()
-	end
 end
 -->8
 --modes
 function init_game()
-	balls = {}
-	spawn_ball(true)
 	level = 1
-	init_bricks()
+	init_level()
 	lives = 3
 	mode = 'start'
+end
+
+function init_level()
+	balls = {}
+	spawn_ball(true)
+	init_bricks()
 end
 
 function upd_start()
@@ -227,6 +227,11 @@ end
 function upd_game()
 	update_paddle()
 	foreach(balls, update_ball)
+
+	if #bricks == 0 then
+		level += 1
+		init_level()
+	end
 end
 
 function draw_game()
@@ -243,7 +248,7 @@ function draw_game()
 end
 
 function upd_over()
-	if btnp(❎) or btnp(🅾️) then
+	if btnp() > 8 then
 		init_game()
 	end
 end
